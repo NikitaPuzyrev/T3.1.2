@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Spring Security Example</title>
+</head>
+<body>
+<h1>Welcome to Index PAGE!</h1>
+</br>
+<!--<a href="/registration">Registration</a>-->
+<div>
+    <form th:action="@{/login}" method="post">
+        <input type="submit" value="Login"/>
+    </form>
+</div>
+</br></br>
+<a href="/myPage">My page</a>
+</br></br></br>
+<div>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out"/>
+    </form>
+</div>
+</body>
+</html>
