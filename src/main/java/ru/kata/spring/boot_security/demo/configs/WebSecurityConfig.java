@@ -2,49 +2,35 @@ package ru.kata.spring.boot_security.demo.configs;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import ru.kata.spring.boot_security.demo.service.UserService;
-
-import javax.sql.DataSource;
 
 
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-/*    private DataSource dataSource;
 
-    public WebSecurityConfig(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }*/
 
-    public WebSecurityConfig(UserService userService) {
+    public WebSecurityConfig(UserService userService, SuccessUserHandler successUserHandler) {
         this.userService = userService;
+        this.successUserHandler = successUserHandler;
     }
 
-    private UserService userService;
-    @Autowired
-    private SuccessUserHandler successUserHandler;
+    private final UserService userService;
+    private final SuccessUserHandler successUserHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
                 //  .antMatchers("/authenticated/**").authenticated()
-                .antMatchers("/", "/registration", "/registration").permitAll()
+                .antMatchers("/", "/index").permitAll()
                 .antMatchers("/users").hasRole("ADMIN")
-
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -66,12 +52,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         authenticationProvider.setUserDetailsService(userService);
-
         return authenticationProvider;
     }
 }
 
-   /* @Override
+
+   /*    private DataSource dataSource;
+
+    public WebSecurityConfig(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }@Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception{
     auth.jdbcAuthentication()
             .dataSource(dataSource)
