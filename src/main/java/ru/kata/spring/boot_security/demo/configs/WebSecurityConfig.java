@@ -1,6 +1,5 @@
 package ru.kata.spring.boot_security.demo.configs;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,7 +12,6 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
 
 
     public WebSecurityConfig(UserService userService, SuccessUserHandler successUserHandler) {
@@ -55,41 +53,3 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return authenticationProvider;
     }
 }
-
-
-   /*    private DataSource dataSource;
-
-    public WebSecurityConfig(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }@Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception{
-    auth.jdbcAuthentication()
-            .dataSource(dataSource)
-            .passwordEncoder(NoOpPasswordEncoder.getInstance())
-            .usersByUsernameQuery("select username, password, active from user_r where username=?")
-            .authoritiesByUsernameQuery("select u.username, ur.roles from user_r u inner join user_role ur on u.id = ur.user_id where u.username=?");
-}
-}*/
-
-
-// аутентификация inMemory
-
-
-    /*@Bean
-    @Override
-    public UserDetailsService userDetailsService() {
-        UserDetails user =
-                User.withDefaultPasswordEncoder()
-                        .username("user")
-                        .password("user")
-                        .roles("USER")
-                        .build();
-        UserDetails admin =
-                User.withDefaultPasswordEncoder()
-                        .username("admin")
-                        .password("admin")
-                        .roles("ADMIN")
-                        .build();
-
-        return new InMemoryUserDetailsManager(user, admin);
-    }*/

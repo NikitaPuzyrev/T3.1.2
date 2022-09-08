@@ -1,6 +1,8 @@
 package ru.kata.spring.boot_security.demo.model;
 
+import org.springframework.security.authentication.jaas.AuthorityGranter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -8,18 +10,13 @@ import java.util.List;
 
 @Entity
 @Table(name = "role_u")
+@Repository
 public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Override
-    public String toString() {
-        return "Role{" +
-                "name='" + name + '\'' +
-                '}';
-    }
 
     @Column
     private String name;
@@ -39,19 +36,17 @@ public class Role implements GrantedAuthority {
     public void setName(String name) {
         this.name = name;
     }
-/* @ManyToMany(mappedBy = "roles")
-    private List<User> users;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }*/
 
     @Override
     public String getAuthority() {
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }

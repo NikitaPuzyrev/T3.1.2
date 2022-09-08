@@ -7,39 +7,50 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.dao.UserDaoImpl;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService implements UsersServise, UserDetailsService {
+    UserDaoImpl userDao;
 
-    private final UserRepository userRepository;
-
-
-
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserService(UserDaoImpl userDao) {
+        this.userDao = userDao;
     }
 
+    @Override
     public User findById(int id) {
-        return userRepository.findById(Math.toIntExact(id)).orElse(null);
+
+        return userDao.findById(id);
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
+
+    @Override
+    public List<User> getAllUsers() {
+        return userDao.getAllUsers();
     }
 
-    public User saveUser(User user) {
-        return userRepository.save(user);
+    @Override
+    @Transactional
+    public void saveUser(User user) {
+        userDao.saveUser(user);
     }
 
+    @Override
+    @Transactional
     public void deleteById(int id) {
-        userRepository.deleteById(Math.toIntExact(id));
+        userDao.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public void updateUser(int id, User updatedUser) {
+        userDao.updateUser(id, updatedUser);
     }
 
     @Override
@@ -58,6 +69,6 @@ public class UserService implements UserDetailsService {
     }
 
     public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return userDao.findByUsername(username);
     }
 }
