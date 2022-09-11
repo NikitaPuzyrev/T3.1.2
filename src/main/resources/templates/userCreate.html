@@ -19,7 +19,11 @@
     <label for="active">Active</label>
     <input type="text" th:field="*{active}" id="active" placeholder="Active">
     <br>
-
+    <label for="roles"><strong>Role</strong></label>
+    <select class="form-select" size="2" multiple aria th:field="*{roles}" id="roles">
+        <option value="1">USER</option>
+        <option value=2>ADMIN</option>
+    </select>
 
     <br>
     <input type="submit" value="Create user">
