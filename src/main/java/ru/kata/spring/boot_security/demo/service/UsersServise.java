@@ -13,8 +13,6 @@ public interface UsersServise {
 
     void deleteById(int id);
 
-    void updateUser(int id, User updatedUser);
-
     User findByUsername(String username);
 }
 

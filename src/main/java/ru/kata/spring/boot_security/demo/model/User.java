@@ -2,11 +2,10 @@ package ru.kata.spring.boot_security.demo.model;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "user_r")
@@ -34,8 +33,15 @@ public class User implements UserDetails {
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "role_id"))
 
-    private List<Role> roles;
+    private Set<Role> roles;
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 
     public int getId() {return id;}
 
@@ -57,13 +63,7 @@ public class User implements UserDetails {
         this.active = active;
     }
 
-    public List<Role> getRoles() {
-        return roles;
-    }
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }
 
     public String getUsername() {
         return username;

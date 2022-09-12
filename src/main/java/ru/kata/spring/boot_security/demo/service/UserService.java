@@ -47,11 +47,6 @@ public class UserService implements UsersServise, UserDetailsService {
         userDao.deleteById(id);
     }
 
-    @Override
-    @Transactional
-    public void updateUser(int id, User updatedUser) {
-        userDao.updateUser(id, updatedUser);
-    }
 
     @Override
     @Transactional

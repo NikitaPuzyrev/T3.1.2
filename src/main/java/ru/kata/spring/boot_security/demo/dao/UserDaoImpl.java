@@ -1,6 +1,5 @@
 package ru.kata.spring.boot_security.demo.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
@@ -8,13 +7,14 @@ import ru.kata.spring.boot_security.demo.model.User;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class UserDaoImpl implements UserDao {
-
+    List<User> list;
     @PersistenceContext
     private EntityManager entityManager;
-    private List<User> users;
+
 
     @Override
     public List<User> getAllUsers() {
@@ -23,32 +23,38 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findById(int id) {
-        users = entityManager.createQuery("select  u from User u", User.class).getResultList();
-        return users.stream().filter(user -> user.getId() == id).findAny().orElse(null);
+        list = entityManager.createQuery("select user from User user where user.id =: idParam", User.class)
+                .setParameter("idParam", id).getResultList();
+        if (list != null) {
+            return list.get(0);
+        } else {
+            return null;
+        }
     }
 
     @Override
     public void saveUser(User user) {
-        List<Role> list = user.getRoles();
-        System.out.println(list);
-        entityManager.merge(user);
-    }
-
-    public void updateUser(int id, User updatedUser) {
-        User userToBeUpdated = findById(id);
-        entityManager.merge(updatedUser);
+         entityManager.merge(user);
     }
 
     @Override
     public void deleteById(int id) {
-        users = entityManager.createQuery("select  u from User u", User.class).getResultList();
         User userToBeDeleted = findById(id);
         entityManager.remove(userToBeDeleted);
+
     }
 
     @Override
-    public User findByUsername(String username) {
-        users = entityManager.createQuery("select  u from User u", User.class).getResultList();
-        return users.stream().filter(user -> user.getUsername().equals(username)).findAny().orElse(null);
+    public User findByUsername(String userName) {
+        list = entityManager.createQuery("select user from User user where user.username =: usernameParam", User.class)
+                .setParameter("usernameParam", userName).getResultList();
+        if (list != null) {
+            return list.get(0);
+        } else {
+            return null;
+        }
+
+
     }
+
 }
