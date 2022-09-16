@@ -27,7 +27,7 @@ public class SuccessUserHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
         User principal = (User) authentication.getPrincipal();
 
-        List<Role> rol = principal.getRoles();
+       Set<Role> rol = principal.getRoles();
         List<String> roles = rol.stream().map(Role::toString).collect(Collectors.toList());
         if (roles.contains("ROLE_ADMIN")) {
 
